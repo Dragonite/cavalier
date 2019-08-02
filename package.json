@@ -1,0 +1,17 @@
+{
+  "name": "white-hat-bot",
+  "version": "1.0.0",
+  "description": "Bot for UWA Ethical Hacking Discord",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Haolin Wu",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "enmap": "^5.0.0",
+    "mysql": "^2.17.1",
+    "osrs-wrapper": "^1.0.5"
+  }
+}
