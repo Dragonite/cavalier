@@ -24,41 +24,60 @@ exports.run = (client, message, args, osrs) => {
 
   getRSN(message.author.id).then((result) => {
     console.log(result)
-    if (result !== []) {
+    if (result === null || result === undefined || result.length === 0) {
+      message.channel.send(
+        {
+          embed: {
+            color: colors.info,
+            title: 'You have no RSN registered',
+            description: 'To register your rsn, please type `.register YourRSNHere`.',
+            timestamp: new Date(),
+            footer: {
+              icon_url: client.user.avatarURL,
+              text: 'Bot'
+            }
+          }
+        }
+      )
+    } else {
       const rsn = result[0].rsn;
       osrs.hiscores.getPlayer(rsn).then(player => {
-        if(player.Skills[option]){
-          message.channel.send(
-            {
-              embed: {
-                color: colors.info,
-                title: `${emoji} ${option} Information for ${rsn}`,
-                fields: [
-                  {
-                    name: "Rank",
-                    value: player.Skills[option].rank.toLocaleString()
-                  },
-                  {
-                    name: "Level",
-                    value: player.Skills[option].level.toLocaleString()
-                  },
-                  {
-                    name: "XP",
-                    value: player.Skills[option].xp.toLocaleString()
-                  },
-                  {
-                    name: "EHP",
-                    value: ehp.calc(option, player.Skills[option].xp).toLocaleString() || 'Error'
+        if (player.Skills[option]) {
+          ehp.total(player).then(result => {
+            message.channel.send(
+              {
+                embed: {
+                  color: colors.info,
+                  title: `${emoji} ${option} Information for ${rsn}`,
+                  fields: [
+                    {
+                      name: "Rank",
+                      value: player.Skills[option].rank.toLocaleString()
+                    },
+                    {
+                      name: "Level",
+                      value: player.Skills[option].level.toLocaleString()
+                    },
+                    {
+                      name: "XP",
+                      value: player.Skills[option].xp.toLocaleString()
+                    },
+                    {
+                      name: "EHP",
+                      value: option === 'Overall' ? result.toLocaleString() : ehp.calc(option, player.Skills[option].xp).toLocaleString()
+                    }
+                  ],
+                  timestamp: new Date(),
+                  footer: {
+                    icon_url: message.author.avatarURL,
+                    text: rsn
                   }
-                ],
-                timestamp: new Date(),
-                footer: {
-                  icon_url: message.author.avatarURL,
-                  text: rsn
                 }
               }
-            }
-          )
+            )
+
+          }
+          ).catch(console.error)
         } else {
           message.channel.send(
             {
@@ -76,8 +95,6 @@ exports.run = (client, message, args, osrs) => {
           )
         }
       })
-    } else {
-
     }
   })
 }
