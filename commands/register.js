@@ -22,8 +22,8 @@ exports.run = (client, message, args, osrs) => {
         {
           embed: {
             color: colors.warning,
-            title: `RSN ${rsn} is already registered!`,
-            description: 'This RSN is already registered. If this is your RSN, please contact an administrator to fix this issue.',
+            title: `You are already registered!`,
+            description: 'If you would like to change your RSN, please contact an Administrator.',
             timestamp: new Date(),
             footer: {
               icon_url: client.user.avatarURL,
